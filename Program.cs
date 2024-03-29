@@ -5,8 +5,9 @@ using SimpleTodo.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 var credential = new DefaultAzureCredential();
-Console.WriteLine(builder.Configuration.GetConnectionString("AZURE_KEY_VAULT_ENDPOINT"));
-builder.Configuration.AddAzureKeyVault(new Uri(builder.Configuration.GetConnectionString("AZURE_KEY_VAULT_ENDPOINT")), credential);
+string keyVaultEndpoint = builder.Configuration.GetConnectionString("AZURE_KEY_VAULT_ENDPOINT");
+Console.WriteLine($"keyVaultEndpoint: {keyVaultEndpoint}");
+builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), credential);
 
 builder.Services.AddScoped<ListsRepository>();
 builder.Services.AddDbContext<TodoDb>(options =>
