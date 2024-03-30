@@ -12,6 +12,9 @@ builder.Services.AddScoped<ListsRepository>();
 builder.Services.AddDbContext<TodoDb>(options =>
 {
     var connectionString = builder.Configuration[builder.Configuration["AZURE_SQL_CONNECTION_STRING_KEY"]];
+    //var connectionString = "Server=tcp:todo-charp-sql-api-server.database.windows.net,1433;Initial Catalog=todo-charp-sql-api-database;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=¸\"Active Directory Default\";";
+    //var connectionString = "Server=tcp:todo-charp-sql-api-server.database.windows.net,1433;Initial Catalog=todo-charp-sql-api-database;Persist Security Info=False;User ID=todo-charp-sql-api-server-admin;Password=38OJZN3FIFUP536V$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+    Console.WriteLine($"connectionString: {connectionString}");
     options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
 });
 builder.Services.AddEndpointsApiExplorer();
