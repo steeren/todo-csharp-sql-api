@@ -1,19 +1,18 @@
 using Azure.Identity;
-using DotNetCoreSqlDb.Data;
 using Microsoft.EntityFrameworkCore;
 using SimpleTodo.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 var credential = new DefaultAzureCredential();
-string keyVaultEndpoint = builder.Configuration.GetConnectionString("AZURE_KEY_VAULT_ENDPOINT");
+string keyVaultEndpoint = builder.Configuration["AZURE_KEY_VAULT_ENDPOINT"];
 Console.WriteLine($"keyVaultEndpoint: {keyVaultEndpoint}");
 builder.Configuration.AddAzureKeyVault(new Uri(keyVaultEndpoint), credential);
 
 builder.Services.AddScoped<ListsRepository>();
 builder.Services.AddDbContext<TodoDb>(options =>
 {
-    builder.Services.AddDbContext<MyDatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING"), sqlOptions => sqlOptions.EnableRetryOnFailure()));
+    var connectionString = builder.Configuration[builder.Configuration["AZURE_SQL_CONNECTION_STRING_KEY"]];
+    options.UseSqlServer(connectionString, sqlOptions => sqlOptions.EnableRetryOnFailure());
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
